@@ -10,7 +10,7 @@ export default async function ChatPage(props: { params: Promise<{ id: string }> 
     initialMessages = await loadChat(id);
   } catch (error) {
     // Chat doesn't exist yet, start fresh
-    console.log('New chat starting:', id);
+    console.log(`Error loading chat ${id}:`, error);
   }
 
   return <Chat id={id} initialMessages={initialMessages} />;
