@@ -1,6 +1,7 @@
 // Example model schema from the Drizzle docs
 // https://orm.drizzle.team/docs/sql-schema-declaration
 
+import { create } from "domain";
 import { sql } from "drizzle-orm";
 import { index, pgTableCreator } from "drizzle-orm/pg-core";
 
@@ -24,4 +25,18 @@ export const posts = createTable(
     updatedAt: d.timestamp({ withTimezone: true }).$onUpdate(() => new Date()),
   }),
   (t) => [index("name_idx").on(t.name)],
+);
+
+export const chats = createTable(
+  "chat",
+  (d) => ({
+    id: d.varchar({ length: 256 }).primaryKey(), // chat ID from generateID()
+    messages: d.json().notNull().default([]), // store messages as JSON
+    createdAt: d
+      .timestamp({ withTimezone: true })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    updatedAt: d.timestamp({ withTimezone: true }).$onUpdate(() => new Date()),
+  }),
+  (t) => [index("chat_created_idx").on(t.createdAt)],
 );

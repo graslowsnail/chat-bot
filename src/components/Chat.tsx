@@ -1,9 +1,24 @@
 "use client";
-import { useChat } from "ai/react";
+import { useChat, type Message } from "ai/react";
 
-export function Chat() {
+export default function Chat({ id, initialMessages }: { id:string, initialMessages:Message[] }) {
   const { messages, input, handleInputChange, handleSubmit, error, reload } =
-    useChat({});
+    useChat({
+      id,//jey useCat this vonvo is abc123
+      initialMessages,// start with these old msgs
+      api: '/api/chat',// send req to this endpoint
+      onFinish: async (message) => {
+        // saves the conversation after ai responds
+        await fetch('/api/save-chat',{
+          method: 'POST',
+          headers: {'Content-type': 'application/json'},
+          body: JSON.stringify({
+            id,
+            messages: [...messages, message]
+          })
+        })
+      }
+    });
 
   return (
     <div className="mx-auto flex w-full max-w-md flex-col">
