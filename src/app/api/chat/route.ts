@@ -5,7 +5,8 @@ import { streamText, type CoreMessage } from 'ai';
 export const maxDuration = 30;
 
 export async function POST(req: Request): Promise<Response> {
-  const { messages }: { messages: CoreMessage[] } = await req.json();
+  const body = await req.json() as { messages: CoreMessage[] };
+  const { messages } = body;
 
   const result = streamText({
     model: google('gemini-2.0-flash'),
