@@ -2,7 +2,8 @@
 import { useChat } from "ai/react";
 
 export function Chat() {
-  const { messages, input, handleInputChange, handleSubmit } = useChat();
+  const { messages, input, handleInputChange, handleSubmit, error, reload } =
+    useChat({});
 
   return (
     <div className="mx-auto flex w-full max-w-md flex-col">
@@ -13,6 +14,15 @@ export function Chat() {
             {m.content}
           </div>
         ))}
+
+        {error && (
+          <>
+            <div>An error occurred.</div>
+            <button type="button" onClick={() => reload()}>
+              Retry
+            </button>
+          </>
+        )}
       </div>
 
       <form onSubmit={handleSubmit} className="flex gap-2">
@@ -21,6 +31,7 @@ export function Chat() {
           onChange={handleInputChange}
           placeholder="Say something..."
           className="flex-1 rounded border p-2"
+          disabled={error != null}
         />
         <button type="submit">Send</button>
       </form>
