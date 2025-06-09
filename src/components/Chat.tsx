@@ -1,4 +1,5 @@
 "use client";
+import { useEffect } from "react";
 import { useChat, type Message } from "ai/react";
 
 export default function Chat({ id, initialMessages }: { id:string, initialMessages:Message[] }) {
@@ -7,18 +8,27 @@ export default function Chat({ id, initialMessages }: { id:string, initialMessag
       id,//jey useCat this vonvo is abc123
       initialMessages,// start with these old msgs
       api: '/api/chat',// send req to this endpoint
-      onFinish: async (message) => {
-        // saves the conversation after ai responds
-        await fetch('/api/save-chat',{
-          method: 'POST',
-          headers: {'Content-type': 'application/json'},
-          body: JSON.stringify({
-            id,
-            messages: [...messages, message]
-          })
-        })
-      }
     });
+
+    // save every new message, when the messages array changes 
+    useEffect(() => {
+      const saveMessages = async () => {
+        try {
+          await fetch('/api/save-chat',{
+            method: 'POST',
+            headers: {'Content-type': 'application/json'},
+            body: JSON.stringify({
+              id,
+              messages: messages
+            })
+          })
+          console.log('message added ')
+        } catch (error) {
+          console.log(`Error saving chat ${id}:`, error);
+        }
+      }
+      saveMessages()
+    }, [messages, id])
 
   return (
     <div className="mx-auto flex w-full max-w-md flex-col">
