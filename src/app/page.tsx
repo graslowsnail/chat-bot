@@ -1,6 +1,5 @@
-import Link from "next/link";
-
-import { LatestPost } from "@/app/_components/post";
+//import Link from "next/link";
+//import { LatestPost } from "@/app/_components/post";
 import Chat from "@/components/Chat";
 import { api, HydrateClient } from "@/trpc/server";
 
