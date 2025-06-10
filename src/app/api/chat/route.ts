@@ -1,5 +1,6 @@
 import { google } from '@ai-sdk/google';
 import { streamText, type CoreMessage } from 'ai';
+import { tool } from 'ai';
 import { z } from 'zod';
 
 interface SearchItem {
@@ -13,7 +14,6 @@ async function searchWeb(query:string) {
     `https://www.googleapis.com/customsearch/v1?key=${process.env.GOOGLE_SEARCH_API_KEY}&cx=${process.env.GOOGLE_SEARCH_ENGINE_ID}&q=${encodeURIComponent(query)}`
   );
   const data = await response.json();
-  console.log(data, "## DATA FROM GOOGLE SEARCH")
   return data.items?.slice(0, 3).map((item: SearchItem) => ({
     title: item.title,
     snippet: item.snippet,
@@ -34,13 +34,16 @@ export async function POST(req: Request): Promise<Response> {
     messages,
     maxSteps: 5,
     tools: {
-      webSearch: {
+      webSearch: tool ({
         description: 'Search the web for current information',
         parameters: z.object({
           query: z.string().describe('The search query to look up')
         }),
-        execute: ({ query }) => searchWeb(query)
-      }
+        execute: async ({ query }) => {
+          const result = await searchWeb(query)
+          return { query, result: result };
+        }
+      })
     }
 
   });
