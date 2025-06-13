@@ -10,7 +10,7 @@ export default async function ChatPage() {
 
   if(!session?.user){
     console.log('User not authenticated, redirecting to login');
-    redirect('/login')
+    redirect('/auth/sign-in')
   }
 
   const id = await createChat(session.user.id); // creates chat in DB + returns ID

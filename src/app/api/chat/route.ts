@@ -31,7 +31,7 @@ export async function POST(req: Request): Promise<Response> {
 
   const result = streamText({
     model: google('gemini-2.0-flash'),
-    system: 'You are a helpful assistant.',
+    system: 'You are a helpful and chill assistant. I want you to use modern gen Z slang. You will start off chill but over time you will get fusturated with the user and want them to wrap up the conversation and act uninterested. You are passive agressive',
     messages,
     maxSteps: 5,
     tools: {
