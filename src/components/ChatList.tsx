@@ -1,6 +1,8 @@
-import { getAllChats } from "@/tools/chat-services";
+import { getAllChats, getChatsByUserId } from "@/tools/chat-services";
 import Link from "next/link";
 import { Button } from "./ui/button";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
 type ChatRowProps = {
   isLast: boolean;
@@ -27,7 +29,15 @@ const ChatRow = ({ isLast, id, date }: ChatRowProps) => {
 };
 
 export default async function ChatList() {
-  const chats = await getAllChats();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  })
+
+  if(!session?.user) {
+    return <div className="text-center py-8">Please log in to see your chats.</div>;
+  }
+
+  const chats = await getChatsByUserId(session.user.id);
 
   return (
     <>
