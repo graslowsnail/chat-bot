@@ -4,12 +4,13 @@ import { db } from '@/server/db'
 import { chats } from '@/server/db/schema';
 import { eq } from 'drizzle-orm'
 
-export async function createChat(): Promise<string> {
+export async function createChat(userId: string): Promise<string> {
     const id = generateId();
     // Insert new chat into database
     await db.insert(chats).values({
       id,
       messages: [],
+      userId,
     });
     
     return id;

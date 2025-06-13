@@ -7,7 +7,7 @@ import {
   boolean,
   //integer,
   index,
-  pgTableCreator
+  pgTableCreator,
 } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
 
@@ -38,6 +38,7 @@ export const chats = createTable(
   (d) => ({
     id: d.varchar({ length: 256 }).primaryKey(), // chat ID from generateID()
     messages: d.json().notNull().default([]), // store messages as JSON
+    userId: d.text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),// user id to chat
     createdAt: d
       .timestamp({ withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
