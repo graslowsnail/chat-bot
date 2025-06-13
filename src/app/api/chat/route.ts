@@ -4,6 +4,7 @@ import { tool } from 'ai';
 import { z } from 'zod';
 
 interface SearchItem {
+
   title: string;
   snippet: string;
   link: string;
