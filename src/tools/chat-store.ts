@@ -2,7 +2,7 @@ import { generateId } from 'ai';
 import type { Message } from 'ai';
 import { db } from '@/server/db'
 import { chats } from '@/server/db/schema';
-import { eq } from 'drizzle-orm'
+import { eq, and } from 'drizzle-orm'
 
 export async function createChat(userId: string): Promise<string> {
     const id = generateId();
@@ -16,8 +16,12 @@ export async function createChat(userId: string): Promise<string> {
     return id;
   }
 
-export async function loadChat(id: string): Promise<Message []> {
-    const chat = await db.select().from(chats).where(eq(chats.id, id)).limit(1)
+export async function loadChat(userId: string, id: string): Promise<Message []> {
+  /*
+    SELECT FROM chats 
+    select from table chats, where (chats.userid = the passes in userID) and (the passed in chat.id = chats.id)
+  */
+  const chat = await db.select().from(chats).where(and(eq(chats.userId, userId), eq(chats.id, id))).limit(1)
 
     if(!chat.length) {
         throw new Error(`Chat ${id} not found`);
