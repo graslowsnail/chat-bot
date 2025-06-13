@@ -20,7 +20,7 @@ const ChatRow = ({ isLast, id, date }: ChatRowProps) => {
       <td className="px-2 py-4 font-mono">{date}</td>
       <td className="px-2 py-4 font-mono">Chat #{id}</td>
       <td className="px-2 py-4 text-right font-mono">
-        <Link href={`/chat/${id}`} className="absolute inset-0">
+        <Link href={`/chat/${id}`} className="absolute inset-0 pt-5">
           Open Chat
         </Link>
       </td>
@@ -34,7 +34,15 @@ export default async function ChatList() {
   })
 
   if(!session?.user) {
-    return <div className="text-center py-8">Please log in to see your chats.</div>;
+    return (
+      <div className="text-center py-8 flex flex-col items-center gap-4">
+        <div>This is an AI chat that surfs the web for you. Just don’t annoy it, or it might get a little salty.</div>
+        <div>Please log in to see your chats.</div>
+        <Link href="/auth/sign-in">
+          <Button className="bg-violet-300 text-black">Log In Here</Button>
+        </Link>
+      </div>
+    )
   }
 
   const chats = await getChatsByUserId(session.user.id);
@@ -44,7 +52,7 @@ export default async function ChatList() {
       <h1 className="mb-4 text-center font-mono text-4xl">Ai Chats</h1>
       <div className="mb-4 flex justify-end">
         <Link href="/chat">
-          <Button>Add Chat</Button>
+          <Button className="bg-violet-300 text-black">Add Chat</Button>
         </Link>
       </div>
 

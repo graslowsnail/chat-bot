@@ -41,8 +41,8 @@ export default function Chat({ id, initialMessages }: { id:string, initialMessag
     }, [messages, id])
 
   return (
-    <div className="flex h-screen max-w-4xl mx-auto flex-col">
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+    <div className="flex h-screen max-w-4xl mx-auto flex-col p-4">
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 mt-16">
         {messages.map((m) => (
           <div key={m.id} className="mb-4">
             <strong>{m.role}: </strong>
